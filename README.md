@@ -1,7 +1,5 @@
-Google PlayµÄÅÀ³æ£¬ÓÃC++Ð´µÄ
+C++å†™çš„Google Playçˆ¬è™«ï¼ˆ2013å¹´å†™çš„ï¼ŒçŽ°åœ¨ä¸ä¸€å®šéƒ½é€‚ç”¨ï¼‰
 
-Ö»ÄÜÅÀÎÄ×ÖÐÅÏ¢£¬²»ÄÜÏÂÔØapk
+åªèƒ½çˆ¬æ–‡å­—ä¿¡æ¯ï¼Œä¸èƒ½ä¸‹è½½apk
 
-ÊÇ´ó¶þ£¨2013Äê£©Ð´µÄ£¬ÏÖÔÚÓÐÐ©²»Ò»¶¨ÊÊÓÃ
-
-ÔËÐÐ»·¾³£ºWindows
+è¿è¡ŒçŽ¯å¢ƒï¼šWindows
