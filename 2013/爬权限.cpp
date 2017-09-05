@@ -31,9 +31,9 @@ DWORD WINAPI download(LPVOID lpparam);
 class DATA
 {
 public:
-	int id;				// 序号
-	string url;			// 链接
-	string permission;	// 权限
+	int id;				// 搴忓彿
+	string url;			// 閾炬帴
+	string permission;	// 鏉冮檺
 	void output()
 	{
 		outfile<<id<<"\t"<<url<<"\t"<<permission<<endl;
@@ -290,7 +290,7 @@ int main()
 	if(fintmp1==NULL)
 	{
 		outfile.open(destfilename);
-		outfile<<"序号\t网页链接\t权限"<<endl;
+		outfile<<"搴忓彿\t缃戦〉閾炬帴\t鏉冮檺"<<endl;
 	}
 	else
 	{
@@ -315,7 +315,7 @@ int main()
 	if(fintmp2==NULL)
 	{
 		outtable.open(desttablename);
-		outtable<<"编号\t分类\t条目"<<endl;
+		outtable<<"缂栧彿\t鍒嗙被\t鏉＄洰"<<endl;
 	}
 	else
 	{
