@@ -1,5 +1,5 @@
-C++写的Google Play爬虫（2013年写的，现在不一定都适用）
+Google Play应用Metadata爬虫
 
-只能爬文字信息，不能下载apk
+2013版：C++实现
 
-运行环境：Windows
+2017版：Python+MySQL实现
