@@ -28,20 +28,20 @@ DWORD WINAPI download(LPVOID lpparam);
 class DATA
 {
 public:
-	int id;				// ĞòºÅ
-	string url;			// Á´½Ó
-	string name;		// Ãû³Æ
-	string intro;		// ËµÃ÷
-	string score;		// Æ½¾ùÆÀ·Ö
-	string votes;		// ÆÀ·ÖÈËÊı
-	string date;		// ¸üĞÂÈÕÆÚ
-	string ver;			// µ±Ç°°æ±¾
-	string android;		// ËùĞèµÄ°²×¿°æ±¾
-	string category;	// Àà±ğ
-	string install;		// ×îÉÙ°²×°´ÎÊı
-	string size;		// ´óĞ¡
-	string price;		// ¼Û¸ñ
-	string range;		// ÄÚÈİ·Ö¼¶
+	int id;				// åºå·
+	string url;			// é“¾æ¥
+	string name;		// åç§°
+	string intro;		// è¯´æ˜
+	string score;		// å¹³å‡è¯„åˆ†
+	string votes;		// è¯„åˆ†äººæ•°
+	string date;		// æ›´æ–°æ—¥æœŸ
+	string ver;			// å½“å‰ç‰ˆæœ¬
+	string android;		// æ‰€éœ€çš„å®‰å“ç‰ˆæœ¬
+	string category;	// ç±»åˆ«
+	string install;		// æœ€å°‘å®‰è£…æ¬¡æ•°
+	string size;		// å¤§å°
+	string price;		// ä»·æ ¼
+	string range;		// å†…å®¹åˆ†çº§
 	void output()
 	{
 		outfile<<id<<"\t";
@@ -167,8 +167,8 @@ DWORD WINAPI download(LPVOID lpparam)
 			InternetCloseHandle(handle);
 //			str=UTF8ToGBK(str);
 //			printf("%s\n",str.c_str());
-			if(match(str,GBKToUTF8("<title>"),GBKToUTF8(" - Google Play ÉÏ"),pos,length))data.name=str.substr(pos,length);
-			if(match(str,GBKToUTF8("<h2>ËµÃ÷</h2>"),GBKToUTF8("</div>"),pos,length))
+			if(match(str,GBKToUTF8("<title>"),GBKToUTF8(" - Google Play ä¸Š"),pos,length))data.name=str.substr(pos,length);
+			if(match(str,GBKToUTF8("<h2>è¯´æ˜</h2>"),GBKToUTF8("</div>"),pos,length))
 			{
 				tmp=str.substr(pos,length);
 				bool left_brac=0;
@@ -198,7 +198,7 @@ DWORD WINAPI download(LPVOID lpparam)
 			}
 			if(match(str,GBKToUTF8("<time itemprop=\"datePublished\">"),GBKToUTF8("</time>"),pos,length,25))data.date=str.substr(pos,length);
 			if(match(str,GBKToUTF8("itemprop=\"softwareVersion\">"),GBKToUTF8("</dd>"),pos,length,20))data.ver=str.substr(pos,length);
-			if(match(str,GBKToUTF8("°æ±¾£º</dt><dd>"),GBKToUTF8("</dd><dt>"),pos,length,40))data.android=str.substr(pos,length);
+			if(match(str,GBKToUTF8("ç‰ˆæœ¬ï¼š</dt><dd>"),GBKToUTF8("</dd><dt>"),pos,length,40))data.android=str.substr(pos,length);
 			if(match(str,GBKToUTF8("</dt><dd><a href="),GBKToUTF8("</a></dd>"),pos,length))
 			{
 				tmp=str.substr(pos,length);
@@ -254,7 +254,7 @@ int main()
 	{
 		outfile.open(destfilename);
 		outfile<<(unsigned char)0xEF<<(unsigned char)0xBB<<(unsigned char)0xBF;
-		outfile<<GBKToUTF8("ĞòºÅ\tÃû³Æ\tÆ½¾ùÆÀ·Ö\tÆÀ·ÖÈËÊı\t¸üĞÂÈÕÆÚ\t×îĞÂ°æ±¾\tËùĞèµÄ°²×¿°æ±¾\tÀà±ğ\t×îÉÙ°²×°´ÎÊı\t´óĞ¡\t¼Û¸ñ\tÄÚÈİ·Ö¼¶\tÍøÒ³Á´½Ó\tËµÃ÷")<<endl;
+		outfile<<GBKToUTF8("åºå·\tåç§°\tå¹³å‡è¯„åˆ†\tè¯„åˆ†äººæ•°\tæ›´æ–°æ—¥æœŸ\tæœ€æ–°ç‰ˆæœ¬\tæ‰€éœ€çš„å®‰å“ç‰ˆæœ¬\tç±»åˆ«\tæœ€å°‘å®‰è£…æ¬¡æ•°\tå¤§å°\tä»·æ ¼\tå†…å®¹åˆ†çº§\tç½‘é¡µé“¾æ¥\tè¯´æ˜")<<endl;
 	}
 	else
 	{
