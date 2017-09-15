@@ -225,7 +225,8 @@ def main_loop(threadidstr, thread_num, url_list, url_set, thread_lock):
 		if url_index >= len(url_list):
 			thread_lock.release()
 			print (threadidstr+" "+str(url_index)+" Finish")
-			return
+			time.sleep(5)
+			continue
 		else:
 			pkg = url_list[url_index][:]
 			thread_lock.release()
