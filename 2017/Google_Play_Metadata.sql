@@ -1,5 +1,5 @@
 CREATE TABLE Metadata (
-	Package_Name varchar(180) not null binary primary key,
+	Package_Name varchar(180) binary primary key,
 	Time bigint not null,
 	Name varchar(100),
 	Download bigint,
