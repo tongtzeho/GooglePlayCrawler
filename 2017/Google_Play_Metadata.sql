@@ -1,5 +1,5 @@
 CREATE TABLE Metadata (
-	Package_Name varchar(180) not null,
+	Package_Name varchar(180) not null binary primary key,
 	Time bigint not null,
 	Name varchar(100),
 	Download bigint,
@@ -18,6 +18,5 @@ CREATE TABLE Metadata (
 	Developer varchar(60),
 	Description varchar(5000),
 	Release_Note varchar(1500),
-	Similar_Apps text,
-	PRIMARY KEY (Package_Name)
+	Similar_Apps text
 );
