@@ -30,7 +30,7 @@ store_item = (
 
 def connect_mysql():
 	try:
-		conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='pkuoslab', db='GooglePlayMetadata', charset='utf8')
+		conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='pkuoslab', db='GooglePlayMetadataEn', charset='utf8')
 		return conn
 	except:
 		time.sleep(1)
@@ -74,16 +74,29 @@ def parse_rating(line):
 	return ""
 
 def parse_date(line):
+	engmonth_num = {
+		'Jan': '01',
+		'Feb': '02',
+		'Mar': '03',
+		'Apr': '04',
+		'May': '05',
+		'Jun': '06',
+		'Jul': '07',
+		'Aug': '08',
+		'Sep': '09',
+		'Oct': '10',
+		'Nov': '11',
+		'Dec': '12'
+	}
 	updatetimestr = ""
-	matcher = re.findall("[0-9]+年", line)
-	if len(matcher):
-		year = matcher[0].replace("年", "")
-		matcher = re.findall("[0-9]+月", line)
+	if line[0:3] in engmonth_num:
+		month = engmonth_num[line[0:3]]
+		matcher = re.findall("[0-9]+,", line)
 		if len(matcher):
-			month = matcher[0].replace("月", "")
-			matcher = re.findall("[0-9]+日", line)
+			day = matcher[0].replace(",", "")
+			matcher = re.findall(", [0-9]+", line)
 			if len(matcher):
-				day = matcher[0].replace("日", "")
+				year = matcher[0].replace(", ", "")
 				updatetimestr = year+"-"+month+"-"+day+" 00:00:00"
 	return str(int(time.mktime(time.strptime(updatetimestr, "%Y-%m-%d %H:%M:%S"))))
 
@@ -117,7 +130,11 @@ def parse_response(response):
 			elif key == 'Category': cmd_dict[key] = "'"+limitlen(response[0][key].replace("\\", "\\\\").replace("\r", "").replace("\n", "\\n").replace("\t", "\\t").replace("'", "\\'").replace("\"", "\\\""), 40)+"'"
 			elif key == 'Tag': cmd_dict[key] = "'"+limitlen(response[0][key].replace("\\", "\\\\").replace("\r", "").replace("\n", "\\n").replace("\t", "\\t").replace("'", "\\'").replace("\"", "\\\""), 120)+"'"
 			elif key == 'Edition': cmd_dict[key] = "'"+limitlen(response[0][key].replace("\\", "\\\\").replace("\r", "").replace("\n", "\\n").replace("\t", "\\t").replace("'", "\\'").replace("\"", "\\\""), 30)+"'"
-			elif key == 'Update_Time': cmd_dict[key] = parse_date(response[0][key])
+			elif key == 'Update_Time':
+				try:
+					cmd_dict[key] = parse_date(response[0][key])
+				except:
+					pass
 			elif key == 'Developer': cmd_dict[key] = "'"+limitlen(response[0][key].replace("\\", "\\\\").replace("\r", "").replace("\n", "\\n").replace("\t", "\\t").replace("'", "\\'").replace("\"", "\\\""), 60)+"'"
 			elif key == 'Price': cmd_dict[key] = "'"+limitlen(response[0][key].replace("\\", "\\\\").replace("\r", "").replace("\n", "\\n").replace("\t", "\\t").replace("'", "\\'").replace("\"", "\\\""), 20)+"'"
 	return cmd_dict
@@ -129,16 +146,26 @@ def update_metadata(response, package):
 	try:
 		ifexists = cursor.execute("select * from Metadata where Package_Name='"+package+"'")
 		if (ifexists == 0):
+			exclude_key = ['Name', 'Developer', 'Description', 'Release_Note']
 			cmd_dict = parse_response(response)
 			cmd1 = "(Package_Name, Time"
 			cmd2 = "('"+package[:179]+"', "+str(int(time.time()))
 			for key, val in cmd_dict.items():
-				cmd1 += ', '+key
-				cmd2 += ', '+val
+				if not key in exclude_key:
+					cmd1 += ', '+key
+					cmd2 += ', '+val
 			cmd1 += ')'
 			cmd2 += ')'
 			cursor.execute("insert into Metadata "+cmd1+" values "+cmd2)
 			conn.commit()
+			for key in exclude_key:
+				try:
+					if key in cmd_dict:
+						cmd = "update Metadata set "+key+" = "+cmd_dict[key]+" where Package_Name='"+package+"'"
+						cursor.execute(cmd)
+						conn.commit()
+				except:
+					continue
 			cursor.close()
 			conn.close()
 			return 0
@@ -178,7 +205,7 @@ def exist_pkg(package):
 def open_url(url):
 	for i in range(10):
 		try:
-			req = request.Request(url+"&hl=zh")
+			req = request.Request(url+"&hl=en")
 			req.add_header('User-Agent', user_agent)
 			web = request.urlopen(req, timeout=30)
 			data = web.read().decode("utf-8")
@@ -243,7 +270,7 @@ def main_loop(threadidstr, thread_num, url_list, url_set, thread_lock):
 						url_index += thread_num
 						continue
 					elif not len(response[0]):
-						print (threadidstr+" "+str(url_index)+" Invalid "+pkg)
+						print (threadidstr+" "+str(url_index)+" Internet Error "+pkg)
 						time.sleep(1)
 						url_index += thread_num
 						continue
@@ -293,4 +320,4 @@ def initialization(thread_num):
 
 if __name__ == '__main__':
 	if os.path.isfile('exit'): os.remove('exit')
-	initialization(6)
+	initialization(4)
